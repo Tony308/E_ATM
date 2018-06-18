@@ -8,3 +8,17 @@ D:\tonyh\Google Drive\University\309IT Information Systems\Workspace\E-ATM\E-ATM
 D:\tonyh\Google Drive\University\309IT Information Systems\Workspace\E-ATM\E-ATM\obj\Debug\E-ATM.csproj.CoreCompileInputs.cache
 D:\tonyh\Google Drive\University\309IT Information Systems\Workspace\E-ATM\E-ATM\obj\Debug\E-ATM.exe
 D:\tonyh\Google Drive\University\309IT Information Systems\Workspace\E-ATM\E-ATM\obj\Debug\E-ATM.pdb
+D:\tonyh\Google Drive\Workspace\E-ATM\E-ATM\obj\Debug\E_ATM.MainMenu.resources
+D:\tonyh\Google Drive\Workspace\E-ATM\E-ATM\obj\Debug\E_ATM.Properties.Resources.resources
+D:\tonyh\Google Drive\Workspace\E-ATM\E-ATM\obj\Debug\E-ATM.csproj.GenerateResource.cache
+D:\tonyh\Google Drive\Workspace\E-ATM\E-ATM\obj\Debug\E-ATM.csproj.CoreCompileInputs.cache
+D:\tonyh\Google Drive\Workspace\E-ATM\E-ATM\obj\Debug\E-ATM.exe
+D:\tonyh\Google Drive\Workspace\E-ATM\E-ATM\obj\Debug\E-ATM.pdb
+D:\tonyh\Google Drive\Workspace\E-ATM\E-ATM\bin\Debug\E-ATM.exe.config
+D:\tonyh\Google Drive\Workspace\E-ATM\E-ATM\bin\Debug\E-ATM.exe
+D:\tonyh\Google Drive\Workspace\E-ATM\E-ATM\bin\Debug\E-ATM.pdb
+D:\tonyh\Google Drive\Workspace\E-ATM\E-ATM\obj\Debug\E_ATM.Display_Balance.resources
+D:\tonyh\Google Drive\Workspace\E-ATM\E-ATM\obj\Debug\E_ATM.Menu.resources
+D:\tonyh\Google Drive\Workspace\E-ATM\E-ATM\obj\Debug\E-ATM.csprojAssemblyReference.cache
+D:\tonyh\Google Drive\Workspace\E-ATM\E-ATM\obj\Debug\E_ATM.Withdraw_Cash.resources
+D:\tonyh\Google Drive\Workspace\E-ATM\E-ATM\obj\Debug\E_ATM.PIN_Update.resources

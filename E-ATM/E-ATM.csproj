@@ -33,10 +33,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
@@ -45,17 +45,50 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Encryption.cs" />
-    <Compile Include="MainMenu.cs">
+    <Compile Include="Display Balance.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainMenu.Designer.cs">
-      <DependentUpon>MainMenu.cs</DependentUpon>
+    <Compile Include="Display Balance.Designer.cs">
+      <DependentUpon>Display Balance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Encryption.cs" />
+    <Compile Include="Access Pane.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Access Pane.Designer.cs">
+      <DependentUpon>Access Pane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Menu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu.Designer.cs">
+      <DependentUpon>Menu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PIN Update.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PIN Update.Designer.cs">
+      <DependentUpon>PIN Update.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="MainMenu.resx">
-      <DependentUpon>MainMenu.cs</DependentUpon>
+    <Compile Include="Withdraw Cash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Withdraw Cash.Designer.cs">
+      <DependentUpon>Withdraw Cash.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Access Pane.resx">
+      <DependentUpon>Access Pane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Display Balance.resx">
+      <DependentUpon>Display Balance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu.resx">
+      <DependentUpon>Menu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PIN Update.resx">
+      <DependentUpon>PIN Update.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -66,6 +99,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Withdraw Cash.resx">
+      <DependentUpon>Withdraw Cash.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

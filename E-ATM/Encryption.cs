@@ -6,17 +6,125 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Net.Sockets;
 using System.IO;
+using System.Data.SqlClient;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace E_ATM
 {
     class Encryption
     {
-        
+        private SqlConnection con;
+        private DataTable dt;
+
         public void Encryption_Load(object sender, EventArgs e)
         {   
 
         }
 
+        public void updatePIN(string pin)
+        {
+
+            try
+            {
+                con = new SqlConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+                SqlCommand cmd = new SqlCommand("dbo.updateClient", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@RFID", "1");
+                cmd.Parameters.AddWithValue("@PIN", hashPIN(pin));
+                con.Open();
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+        public Boolean getClient(string pin)
+        {
+
+            try
+            {
+                con = new SqlConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+                SqlCommand cmd = new SqlCommand("dbo.selectClient", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@RFID", "1");
+                cmd.Parameters.AddWithValue("@PIN", hashPIN(pin));
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                dt = new DataTable();
+                da.Fill(dt);
+                con.Close();
+                da.Dispose();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+
+        }
+
+        public string hashPIN(string e)
+        {
+
+            byte[] salt;
+
+            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+
+            var pbkdf2 = new Rfc2898DeriveBytes(e, salt, 10000);
+            byte[] hash = pbkdf2.GetBytes(20);
+
+            byte[] hashBytes = new byte[36];
+            Array.Copy(salt, 0, hashBytes, 0, 16);
+            Array.Copy(hash, 0, hashBytes, 16, 20);
+
+            string result = Convert.ToBase64String(hashBytes);
+
+            return result;
+        }
+        
+        public void unhashPIN()
+        {
+            con = new SqlConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
+            SqlCommand cmd = new SqlCommand("dbo.selectClient1", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@ID",);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            dt = new DataTable();
+            da.Fill(dt);
+            con.Close();
+            da.Dispose();
+
+            string pin = dt.Rows[0][2].ToString();
+
+            byte[] hashBytes = Convert.FromBase64String(pin);
+            /* Get the salt */
+            byte[] salt = new byte[16];
+            Array.Copy(hashBytes, 0, salt, 0, 16);
+            /* Compute the hash on the password the user entered */
+            var pbkdf2 = new Rfc2898DeriveBytes(pin, salt, 10000);
+            byte[] hash = pbkdf2.GetBytes(20);
+            Console.WriteLine(hash);
+            /* Compare the results */
+            for (int i = 0; i < 20; i++)
+                if (hashBytes[i + 16] != hash[i]) 
+                    throw new UnauthorizedAccessException();
+        }
+
+        public void insertClient()
+        {
+            
+        }
         public void GenKey_SaveinContainer(string containerName)
         {
             // Create the CspParameters object and set the key container   
@@ -30,6 +138,7 @@ namespace E_ATM
 
             // Display the key information to the console.  
             Console.WriteLine("Key added to container: \n  {0}", rsa.ToXmlString(true));
+
         }
 
         public void GetKeyFromContainer(string ContainerName)
@@ -67,7 +176,7 @@ namespace E_ATM
             Console.WriteLine("Key deleted.");
         }
 
-        public void encrypt()
+        public void encrypt(String containerName, String PIN)
         {
             //Initialize the byte arrays to the public key information.  
             byte[] PublicKey = {214,46,220,83,160,73,40,39,201,155,19,202,3,11,191,178,56,
@@ -85,8 +194,15 @@ namespace E_ATM
             byte[] EncryptedSymmetricKey;
             byte[] EncryptedSymmetricIV;
 
-            //Create a new instance of the RSACryptoServiceProvider class.  
-            RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
+            // Create the CspParameters object and set the key container   
+            // name used to store the RSA key pair.  
+            CspParameters cp = new CspParameters();
+            cp.KeyContainerName = containerName;
+
+            // Create a new instance of RSACryptoServiceProvider that accesses  
+            // the key container MyKeyContainerName.  
+            RSACryptoServiceProvider RSA = new RSACryptoServiceProvider(cp);
+
 
             //Create a new instance of the RSAParameters structure.  
             RSAParameters RSAKeyInfo = new RSAParameters();
@@ -105,24 +221,6 @@ namespace E_ATM
             EncryptedSymmetricKey = RSA.Encrypt(RM.Key, false);
             EncryptedSymmetricIV = RSA.Encrypt(RM.IV, false);
         }
-
-        public void decrypt()
-        {
-            //Create values to store encrypted symmetric keys.  
-            byte[] EncryptedSymmetricKey;
-            byte[] EncryptedSymmetricIV;
-
-            //Create a new instance of the RSACryptoServiceProvider class.  
-            RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
-
-            // Export the public key information and send it to a third party.  
-            // Wait for the third party to encrypt some data and send it back.  
-
-            //Decrypt the symmetric key and IV.  
-            Byte[] SymmetricKey = RSA.Decrypt(EncryptedSymmetricKey, false);
-            Byte[] SymmetricIV = RSA.Decrypt(EncryptedSymmetricIV, false);
-        }
-
 
     }
 
