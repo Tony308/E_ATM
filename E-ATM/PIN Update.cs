@@ -49,15 +49,12 @@ namespace E_ATM
                     Menu main = new Menu();
                     main.Show();
                     this.Hide();
-
                 }
                 else
                 {
                     Console.WriteLine("PIN does not match.");
                 }
-
             }
-
         }
 
         private void enterBtn_Click(object sender, EventArgs e)

@@ -9,23 +9,28 @@ using System.IO;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace E_ATM
 {
     class Encryption
     {
         private SqlConnection con;
-        private DataTable dt;
+        private Boolean authenticated;
+        public DataTable dt;
+        private string pin;
 
-        public void Encryption_Load(object sender, EventArgs e)
-        {   
+        public Boolean getAuthentication()
+        {
+            return this.authenticated;
+        }
 
+        public void setAuthentication(Boolean e)
+        {
+            this.authenticated = e;
         }
 
         public void updatePIN(string pin)
         {
-
             try
             {
                 con = new SqlConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
@@ -35,6 +40,7 @@ namespace E_ATM
                 cmd.Parameters.AddWithValue("@PIN", hashPIN(pin));
                 con.Open();
                 cmd.ExecuteNonQuery();
+                con.Close();
 
             }
             catch (Exception e)
@@ -42,40 +48,55 @@ namespace E_ATM
                 Console.WriteLine(e);
             }
         }
+
         public Boolean getClient(string pin)
         {
-
             try
             {
                 con = new SqlConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
                 SqlCommand cmd = new SqlCommand("dbo.selectClient", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@RFID", "1");
-                cmd.Parameters.AddWithValue("@PIN", hashPIN(pin));
-
+                cmd.Parameters.AddWithValue("@RFID", 1);
+                cmd.Parameters.AddWithValue("@PIN", pin);
                 con.Open();
                 cmd.ExecuteNonQuery();
+
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 dt = new DataTable();
                 da.Fill(dt);
                 con.Close();
                 da.Dispose();
-                return true;
+
+                if (dt.Rows[0][2].ToString() == pin)
+                {
+                    this.pin = pin;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 return false;
             }
-
         }
 
         public string hashPIN(string e)
         {
 
-            byte[] salt;
+            byte[] salt = { 214,46,220,83,160,73,40,39,201,155,19,202,3,11,191,178,56,
+            74,90,36,248,103,18,144,170,163,145,87,54,61,34,220,222,
+            207,137,149,173,14,92,120,206,222,158,28,40,24,30,16,175,
+            108,128,35,230,118,40,121,113,125,216,130,11,24,90,48,194,
+            240,105,44,76,34,57,249,228,125,80,38,9,136,29,117,207,139,
+            168,181,85,137,126,10,126,242,120,247,121,8,100,12,201,171,
+            38,226,193,180,190,117,177,87,143,242,213,11,44,180,113,93,
+            106,99,179,68,175,211,164,116,64,148,226,254,172,147};
 
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+            new RNGCryptoServiceProvider().GetBytes(salt);
 
             var pbkdf2 = new Rfc2898DeriveBytes(e, salt, 10000);
             byte[] hash = pbkdf2.GetBytes(20);
@@ -84,32 +105,26 @@ namespace E_ATM
             Array.Copy(salt, 0, hashBytes, 0, 16);
             Array.Copy(hash, 0, hashBytes, 16, 20);
 
-            string result = Convert.ToBase64String(hashBytes);
-
-            return result;
+            return Convert.ToBase64String(hashBytes);
         }
-        
+
+
         public void unhashPIN()
         {
-            con = new SqlConnection(ConfigurationManager.ConnectionStrings["dbConn"].ConnectionString);
-            SqlCommand cmd = new SqlCommand("dbo.selectClient1", con);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@ID",);
-            con.Open();
-            cmd.ExecuteNonQuery();
-            con.Close();
-
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            dt = new DataTable();
-            da.Fill(dt);
-            con.Close();
-            da.Dispose();
 
             string pin = dt.Rows[0][2].ToString();
 
             byte[] hashBytes = Convert.FromBase64String(pin);
             /* Get the salt */
-            byte[] salt = new byte[16];
+            byte[] salt = { 214,46,220,83,160,73,40,39,201,155,19,202,3,11,191,178,56,
+            74,90,36,248,103,18,144,170,163,145,87,54,61,34,220,222,
+            207,137,149,173,14,92,120,206,222,158,28,40,24,30,16,175,
+            108,128,35,230,118,40,121,113,125,216,130,11,24,90,48,194,
+            240,105,44,76,34,57,249,228,125,80,38,9,136,29,117,207,139,
+            168,181,85,137,126,10,126,242,120,247,121,8,100,12,201,171,
+            38,226,193,180,190,117,177,87,143,242,213,11,44,180,113,93,
+            106,99,179,68,175,211,164,116,64,148,226,254,172,147};
+
             Array.Copy(hashBytes, 0, salt, 0, 16);
             /* Compute the hash on the password the user entered */
             var pbkdf2 = new Rfc2898DeriveBytes(pin, salt, 10000);

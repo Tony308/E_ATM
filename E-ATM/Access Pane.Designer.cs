@@ -69,7 +69,7 @@
             this.EnterBtn.Location = new System.Drawing.Point(43, 136);
             this.EnterBtn.Name = "EnterBtn";
             this.EnterBtn.Size = new System.Drawing.Size(75, 23);
-            this.EnterBtn.TabIndex = 4;
+            this.EnterBtn.TabIndex = 3;
             this.EnterBtn.Text = "Enter";
             this.EnterBtn.UseVisualStyleBackColor = true;
             this.EnterBtn.Click += new System.EventHandler(this.EnterBtn_Click);
@@ -80,7 +80,7 @@
             this.PinMTB.Name = "PinMTB";
             this.PinMTB.PasswordChar = '*';
             this.PinMTB.Size = new System.Drawing.Size(100, 22);
-            this.PinMTB.TabIndex = 6;
+            this.PinMTB.TabIndex = 2;
             // 
             // MainMenu
             // 

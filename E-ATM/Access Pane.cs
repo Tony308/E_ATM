@@ -27,7 +27,7 @@ namespace E_ATM
             PinMTB.Text = null;
             PinMTB.MaxLength = 4;
             Encryption form = new Encryption();
-            form.unhashPIN();
+
         }
 
         
@@ -41,12 +41,20 @@ namespace E_ATM
             Encryption form = new Encryption();
             if (form.getClient(PinMTB.Text))
             {
+                //Sets boolean to true to show authentication accepted.
+                form.setAuthentication(true);
+                form.getAuthentication();
+                //if pin matches against database pin then execute.
                 Menu menu = new Menu();
                 menu.Show();
                 this.Hide();
+                
             } else
             {
+                //Doesn't match PIN in the database.
                 MessageBox.Show("You've entered the wrong PIN.");
+                PinMTB.Text = null;
+                this.Show();
             }
         }
 
